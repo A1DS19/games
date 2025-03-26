@@ -8,13 +8,13 @@ fi
 mkdir -p "$1/bin"
 cd "$1"
 
-# Ensure TAB character is preserved in Makefile
-cat > Makefile <<- 'EOF'
+cat > Makefile <<EOF
 all:
-	g++ main.cpp -o ./bin/main
+$(echo -e "\tmkdir -p ./bin")
+$(echo -e "\tg++ main.cpp -o ./bin/main")
 EOF
 
-cat > main.cpp << 'EOF'
+cat > main.cpp << EOF
 #include <cstdlib>
 #include <iostream>
 using namespace std;
