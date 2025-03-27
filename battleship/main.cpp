@@ -132,9 +132,88 @@ void drawBoards(const Player &player) {
   cout << endl;
 }
 
+char *getShipNameForShipType(ShipType &type) {
+  switch (type) {
+  case ST_AIRCRAFT_CARRIER:
+    return "Aircraft Carrier";
+    break;
+  case ST_DESTROYER:
+    return "Destroyer";
+    break;
+  case ST_CRUISER:
+    return "Cruiser";
+    break;
+  case ST_BATTLESHIP:
+    return "Battleship";
+    break;
+  case ST_SUBMARINE:
+    return "Submarine";
+    break;
+  default:
+    return "None";
+  }
+}
+
+template <typename T> void printArray(const T arr[]) {
+  for (int i = 0; i < sizeof(arr) / arr[0]; i++) {
+    cout << arr[i];
+  }
+  cout << endl;
+}
+
+ShipPosition mapBoardPosition(char rowInput, int colInput) {
+  char realRow = rowInput - 'A';
+  int realCol = colInput - 1;
+
+  ShipPosition boardPosition;
+
+  boardPosition.col = realCol;
+  boardPosition.row = realRow;
+
+  return boardPosition;
+}
+
+ShipPosition getBoardPosition() {
+  char rowInput;
+  int colInput;
+
+  const char validRowInputs[] = {'A', 'B', 'C', 'D', 'E',
+                                 'F', 'G', 'H', 'I', 'J'};
+  const int validColInputs[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+  cout << "Enter valid row" << endl;
+  printArray(validRowInputs);
+  cin >> rowInput;
+
+  cout << "Enter valid col" << endl;
+  printArray(validColInputs);
+  cin >> colInput;
+
+  return mapBoardPosition(rowInput, colInput);
+}
+
+ShipOrientation getShipOrientation() {
+  // continue here
+}
+
 void setupBoards(Player &player) {
   clearBoards(player);
-  drawBoards(player);
+  for (int i = 0; i < NUM_SHIPS; i++) {
+    drawBoards(player);
+    Ship &currentShip = player.ships[i];
+    ShipPosition shipPosition;
+    ShipOrientation shipOrientation;
+    bool isValidPlacement = false;
+
+    do {
+      cout << player.name
+           << " please set the position and orientation for your "
+           << getShipNameForShipType(currentShip.type) << endl;
+      shipPosition = getBoardPosition();
+      shipOrientation = getShipOrientation();
+
+    } while (!isValidPlacement);
+  }
 }
 
 void playGame(Player &player1, Player &player2) {

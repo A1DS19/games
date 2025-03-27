@@ -72,5 +72,11 @@ void drawShipBoardRow(const Player &player, int row);
 void drawGuessBoardRow(const Player &player, int row);
 char getShipRepresentation(const Player &player, int row, int col);
 char getGuessRepresentation(const Player &player, int row, int col);
+char *getShipNameForShipType(ShipType &type);
+ShipPosition getBoardPosition();
+template <typename T>
+void printArray(const T arr[]);
+ShipPosition mapBoardPosition(char rowInput, int colInput);
+ShipOrientation getShipOrientation();
 
 #endif
