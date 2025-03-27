@@ -193,7 +193,7 @@ ShipPosition getBoardPosition() {
 }
 
 ShipOrientation getShipOrientation() {
-  // continue here
+  // continue here 29:09
 }
 
 void setupBoards(Player &player) {
