@@ -1,0 +1,16 @@
+# Ignore build artifacts
+/build/
+/bin/
+/lib/
+
+# Ignore generated files
+compile_commands.json
+.clang_complete
+
+# Ignore editor files
+*.swp
+*~
+
+# OS-specific files
+.DS_Store
+.cache/
