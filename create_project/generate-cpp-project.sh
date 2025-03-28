@@ -42,7 +42,7 @@ get_filename_component(PROJECT_NAME ${CMAKE_SOURCE_DIR} NAME)
 project(${PROJECT_NAME})
 
 # Set the C++ standard
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 20)
 
 # Include directories
 include_directories(${CMAKE_SOURCE_DIR}/include)
