@@ -75,8 +75,10 @@ char getGuessRepresentation(const Player &player, int row, int col);
 char *getShipNameForShipType(ShipType &type);
 ShipPosition getBoardPosition();
 template <typename T>
-void printArray(const T arr[]);
+void printArray(const T arr[], int size);
 ShipPosition mapBoardPosition(char rowInput, int colInput);
 ShipOrientation getShipOrientation();
+bool isValidPlacement(const Player &player, const Ship &currentShip, const ShipPosition &shipPosition, const ShipOrientation &shipOrientation);
+void placeShipOnBoard(Player &player, Ship &currentShip, const ShipPosition &shipPosition, const ShipOrientation &shipOrientation);
 
 #endif

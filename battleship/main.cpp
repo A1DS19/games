@@ -154,9 +154,9 @@ char *getShipNameForShipType(ShipType &type) {
   }
 }
 
-template <typename T> void printArray(const T arr[]) {
-  for (int i = 0; i < sizeof(arr) / arr[0]; i++) {
-    cout << arr[i];
+template <typename T> void printArray(const T arr[], int size) {
+  for (int i = 0; i < size; i++) {
+    cout << arr[i] << (i == size - 1 ? "" : "-");
   }
   cout << endl;
 }
@@ -177,23 +177,81 @@ ShipPosition getBoardPosition() {
   char rowInput;
   int colInput;
 
-  const char validRowInputs[] = {'A', 'B', 'C', 'D', 'E',
-                                 'F', 'G', 'H', 'I', 'J'};
-  const int validColInputs[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+  const char validRowInputs[10] = {'A', 'B', 'C', 'D', 'E',
+                                   'F', 'G', 'H', 'I', 'J'};
+  const int validColInputs[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
   cout << "Enter valid row" << endl;
-  printArray(validRowInputs);
+  printArray<char>(validRowInputs, 10);
   cin >> rowInput;
 
   cout << "Enter valid col" << endl;
-  printArray(validColInputs);
+  printArray<int>(validColInputs, 10);
   cin >> colInput;
 
   return mapBoardPosition(rowInput, colInput);
 }
 
 ShipOrientation getShipOrientation() {
-  // continue here 29:09
+  ShipOrientation shipOrientation;
+  const char validInput[2] = {'H', 'V'};
+  printArray(validInput, 2);
+  char input;
+  cin >> input;
+
+  if (input == 'H') {
+    shipOrientation = SO_HORIZONTAL;
+  }
+
+  if (input == 'V') {
+    shipOrientation = SO_VERTICAL;
+  }
+
+  return shipOrientation;
+}
+
+bool isValidPlacement(const Player &player, const Ship &currentShip,
+                      const ShipPosition &shipPosition,
+                      const ShipOrientation &shipOrientation) {
+  if (shipOrientation == SO_HORIZONTAL) {
+    for (int c = 0; c < (shipPosition.col + currentShip.size); c++) {
+      if (player.shipBoard[shipPosition.row][c].type != ST_NONE ||
+          c >= BOARD_SIZE) {
+        return false;
+      }
+    }
+  } else {
+    for (int r = shipPosition.row; r < (shipPosition.row + currentShip.size);
+         r++) {
+      if (player.shipBoard[r][shipPosition.col].type != ST_NONE ||
+          r >= BOARD_SIZE) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
+void placeShipOnBoard(Player &player, Ship &currentShip,
+                      const ShipPosition &shipPosition,
+                      const ShipOrientation &shipOrientation) {
+  currentShip.position = shipPosition;
+  currentShip.orientation = shipOrientation;
+
+  if (shipOrientation == SO_HORIZONTAL) {
+    for (size_t c = shipPosition.col; c < (shipPosition.col + currentShip.size);
+         c++) {
+      player.shipBoard[shipPosition.row][c].type = currentShip.type;
+      player.shipBoard[shipPosition.row][c].isHit = false;
+    }
+  } else {
+    for (size_t r = shipPosition.row; r < (shipPosition.row + currentShip.size);
+         r++) {
+      player.shipBoard[r][shipPosition.col].type = currentShip.type;
+      player.shipBoard[r][shipPosition.col].isHit = false;
+    }
+  }
 }
 
 void setupBoards(Player &player) {
@@ -203,7 +261,7 @@ void setupBoards(Player &player) {
     Ship &currentShip = player.ships[i];
     ShipPosition shipPosition;
     ShipOrientation shipOrientation;
-    bool isValidPlacement = false;
+    bool validPlacement = false;
 
     do {
       cout << player.name
@@ -211,9 +269,16 @@ void setupBoards(Player &player) {
            << getShipNameForShipType(currentShip.type) << endl;
       shipPosition = getBoardPosition();
       shipOrientation = getShipOrientation();
+      validPlacement =
+          isValidPlacement(player, currentShip, shipPosition, shipOrientation);
+      if (!validPlacement) {
+        cout << "invalid placement" << endl;
+      }
 
-    } while (!isValidPlacement);
+    } while (!validPlacement);
+    placeShipOnBoard(player, currentShip, shipPosition, shipOrientation);
   }
+  drawBoards(player);
 }
 
 void playGame(Player &player1, Player &player2) {
@@ -224,6 +289,9 @@ void playGame(Player &player1, Player &player2) {
 int main(int argc, char *argv[]) {
   Player player1;
   Player player2;
+
+  initializePlayer(&player1, "jose");
+  initializePlayer(&player2, "padilla");
 
   playGame(player1, player2);
 
