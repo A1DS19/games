@@ -80,5 +80,6 @@ ShipPosition mapBoardPosition(char rowInput, int colInput);
 ShipOrientation getShipOrientation();
 bool isValidPlacement(const Player &player, const Ship &currentShip, const ShipPosition &shipPosition, const ShipOrientation &shipOrientation);
 void placeShipOnBoard(Player &player, Ship &currentShip, const ShipPosition &shipPosition, const ShipOrientation &shipOrientation);
+void clearScreen();
 
 #endif
