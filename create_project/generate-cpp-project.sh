@@ -6,15 +6,15 @@ if [ -z "$1" ]; then
 fi
 
 # Create necessary directories: bin, build, include, lib, scripts, and src
-mkdir -p "$1"/{bin,build,include,scripts,src}
+mkdir -p "$1"/{bin,build,include,scripts,src,lib}
 cd "$1"
 
 # Create .gitignore file
 cat > .gitignore << 'EOF'
 # Ignore build artifacts
-/build/
-/bin/
-/lib/
+build/*
+bin/*
+lib/*
 
 # Ignore generated files
 compile_commands.json
@@ -58,6 +58,15 @@ add_executable(main ${SOURCES})
 
 # Set the output directory for the executable
 set_target_properties(main PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
+
+# See what is happening during linking
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
+# Add library directory
+link_directories(${CMAKE_SOURCE_DIR}/lib)
+
+# Link pdcurses library
+# target_link_libraries(main PRIVATE pdcurses) uncomment and add library
 
 # Custom target to generate .clang_complete (optional)
 add_custom_target(
