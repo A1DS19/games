@@ -20,8 +20,14 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 # Source files (all .cpp files in the src directory)
 file(GLOB SOURCES ${CMAKE_SOURCE_DIR}/src/*.cpp)
 
+# Include utils directories
+include_directories(${CMAKE_SOURCE_DIR}/utils/include)
+
+#Include source files for utils
+file(GLOB UTILS_SRC ${CMAKE_SOURCE_DIR}/utils/src/*.cpp)
+
 # Add executable
-add_executable(main ${SOURCES})
+add_executable(main ${SOURCES} ${UTILS_SRC})
 
 # Set the output directory for the executable
 set_target_properties(main PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
