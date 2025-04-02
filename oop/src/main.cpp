@@ -24,7 +24,11 @@ int main() {
   std::cout << fractionA;
 
   Vector2d vectorA;
+  Vector2d vectorB;
   std::cout << vectorA;
+
+  auto rva = vectorA * vectorB;
+  std::cout << "res *: " << rva << std::endl;
 
   return EXIT_SUCCESS;
 }

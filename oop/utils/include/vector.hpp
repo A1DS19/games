@@ -13,6 +13,13 @@ class Vector2d {
     friend std::ostream &operator<<(std::ostream &stream,const Vector2d& vector2d);
     bool operator==(const Vector2d &other) const;
     bool operator!=(const Vector2d &other) const;
+    Vector2d operator-() const;
+    Vector2d operator*(float scale) const;
+    Vector2d operator/(float scale) const;
+    Vector2d &operator*=(float scale);
+    Vector2d &operator/=(float scale);
+    friend float operator*(Vector2d &vecA, Vector2d &vecB);
+
   private:
     float mx, my;
 };
