@@ -19,6 +19,8 @@ class Vector2d {
     Vector2d &operator*=(float scale);
     Vector2d &operator/=(float scale);
     friend float operator*(Vector2d &vecA, Vector2d &vecB);
+    void Rotate(const float angle, Vector2d &aroundpoint);
+    Vector2d RotationResult(float angle, const Vector2d &aroundpoint);
 
   private:
     float mx, my;

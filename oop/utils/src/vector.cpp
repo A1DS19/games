@@ -1,6 +1,7 @@
 #include "vector.hpp"
 
 #include <cassert>
+#include <cmath>
 
 #include "utils.hpp"
 
@@ -36,3 +37,14 @@ Vector2d &Vector2d::operator/=(float scale) {
 float operator*(Vector2d &vecA, Vector2d &vecB) {
   return (vecA.mx * vecB.mx) + (vecA.my + vecB.my);
 }
+void Vector2d::Rotate(const float angle, Vector2d &aroundpoint) {
+  // float cosine = cosf(angle);
+  // float sine = sinf(angle);
+  // Vector2d thisVec(mx, my);
+  // thisVec -= aroundpoint;
+  // float xRot = thisVec.mx * cosine - thisVec.my * sine;
+  // float yRot = thisVec.mx * sine + thisVec.my * cosine;
+  // Vector2d rot = Vector2d(xRot, yRot);
+  // *this = rot + aroundpoint;
+}
+Vector2d Vector2d::RotationResult(float angle, const Vector2d &aroundpoint) {}

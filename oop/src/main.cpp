@@ -2,6 +2,7 @@
 
 #include <cassert>
 
+#include "dynamicArray.hpp"
 #include "sectionThreeClasses.hpp"
 #include "sectionTwoClasses.hpp"
 #include "vector.hpp"
@@ -29,6 +30,12 @@ int main() {
 
   auto rva = vectorA * vectorB;
   std::cout << "res *: " << rva << std::endl;
+
+  DynamicArray da;
+  da.Init();
+  da.Print();
+  da.PushBack(20);
+  da.Print();
 
   return EXIT_SUCCESS;
 }
