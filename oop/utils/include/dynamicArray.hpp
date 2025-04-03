@@ -3,10 +3,12 @@
 #include <iostream>
 #include <cstddef>
 #include <algorithm>
+#include <cassert>
 
 class DynamicArray{
   public:
     DynamicArray():mPtrData(nullptr),mSize(0),mCapacity(0){}
+    DynamicArray(const DynamicArray &other);
     ~DynamicArray();
     inline size_t GetSize() const;
     inline size_t GetCapacity() const;
@@ -17,6 +19,7 @@ class DynamicArray{
     bool PopBack(int &element);
     const int &operator[](const size_t index) const;
     int &operator[](const size_t index);
+    DynamicArray &operator=(const DynamicArray &other);
     void Print();
 
   private:

@@ -8,6 +8,16 @@ DynamicArray::~DynamicArray() {
   std::cout << "dynamic array destroyed" << std::endl;
 }
 
+DynamicArray::DynamicArray(const DynamicArray &other) {
+  bool result = this->Init(other.mCapacity);
+  assert(result);
+
+  this->mSize = other.mSize;
+  for (size_t i = 0; i < this->mSize; i++) {
+    this->mPtrData[i] = other[i];
+  }
+}
+
 inline size_t DynamicArray::GetSize() const { return this->mSize; }
 
 inline size_t DynamicArray::GetCapacity() const { return this->mCapacity; }
@@ -76,6 +86,26 @@ const int &DynamicArray::operator[](const size_t index) const {
 
 int &DynamicArray::operator[](const size_t index) {
   return this->mPtrData[index];
+}
+
+DynamicArray &DynamicArray::operator=(const DynamicArray &other) {
+  if (this == &other) {
+    return *this;
+  }
+
+  if (this->mPtrData != nullptr) {
+    delete[] this->mPtrData;
+  }
+
+  bool result = this->Init(other.mCapacity);
+  assert(result);
+
+  this->mSize = other.mSize;
+  for (size_t i = 0; i < this->mSize; i++) {
+    this->mPtrData[i] = other[i];
+  }
+
+  return *this;
 }
 
 void DynamicArray::Print() {
