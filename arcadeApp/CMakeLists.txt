@@ -32,8 +32,26 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 # Add library directory
 link_directories(${CMAKE_SOURCE_DIR}/lib)
 
-# Link pdcurses library
-# target_link_libraries(main PRIVATE pdcurses) uncomment and add library
+# Enable FetchContent
+include(FetchContent)
+
+# Declare SDL2 from its official GitHub repo.
+# Check https://github.com/libsdl-org/SDL/tags for the latest stable release tag.
+FetchContent_Declare(
+  SDL2
+  GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
+  GIT_TAG release-2.30.11
+)
+
+# Control some SDL2 build options if desired
+set(SDL_SHARED OFF CACHE BOOL "" FORCE)
+set(SDL_STATIC ON  CACHE BOOL "" FORCE)
+
+# Actually download and add SDL2
+FetchContent_MakeAvailable(SDL2)
+
+# Now your target can link to SDL2
+target_link_libraries(main PRIVATE SDL2::SDL2 SDL2::SDL2main)
 
 # Custom target to generate .clang_complete (optional)
 add_custom_target(
