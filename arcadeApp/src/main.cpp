@@ -11,7 +11,7 @@ int main() {
   }
 
   SDL_Window *sdlWindow =
-      SDL_CreateWindow("ArcadaApp", SDL_WINDOWPOS_CENTERED,
+      SDL_CreateWindow("ArcadeApp", SDL_WINDOWPOS_CENTERED,
                        SDL_WINDOWPOS_CENTERED, SCREEN_W, SCREEN_H, 0);
 
   if (sdlWindow == nullptr) {
