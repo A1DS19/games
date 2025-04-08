@@ -5,25 +5,6 @@
 #include "graphics/screenBuffer.hpp"
 
 int main() {
-  if (SDL_Init(SDL_INIT_VIDEO)) {
-    std::cout << "SDL init failed" << std::endl;
-    return EXIT_FAILURE;
-  }
-
-  SDL_Window *sdlWindow =
-      SDL_CreateWindow("ArcadeApp", SDL_WINDOWPOS_CENTERED,
-                       SDL_WINDOWPOS_CENTERED, SCREEN_W, SCREEN_H, 0);
-
-  if (sdlWindow == nullptr) {
-    std::cout << "SDL could not create window: " << SDL_GetError() << std::endl;
-    return EXIT_FAILURE;
-  }
-
-  SDL_Surface *windowSurface = SDL_GetWindowSurface(sdlWindow);
-
-  SDL_PixelFormat *pixelFormat = windowSurface->format;
-  Color::InitColorFormat(pixelFormat);
-
   ScreenBuffer screenBuffer;
   screenBuffer.Init(pixelFormat->format, windowSurface->w, windowSurface->h);
   screenBuffer.SetPixel(Color::Red(), SCREEN_W / 2, SCREEN_H / 2);
@@ -45,9 +26,6 @@ int main() {
       }
     }
   }
-
-  SDL_DestroyWindow(sdlWindow);
-  SDL_Quit();
 
   return EXIT_SUCCESS;
 }
