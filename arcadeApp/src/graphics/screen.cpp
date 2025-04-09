@@ -53,6 +53,6 @@ void Screen::Draw(int x, int y, const Color &color) {}
 
 void Screen::Draw(const Vec2D &point, const Color &color) {}
 
-void ClearScreen() {
+void Screen::ClearScreen() {
   SDL_FillRect(mnoptrSurface, nullptr, mClearColor.GetPixelColor());
 }
