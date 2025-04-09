@@ -25,6 +25,8 @@ public:
   void Draw(const Vec2D &point, const Color &color);
 
 private:
+  Screen(const Screen &screen);
+  Screen operator=(const Screen &screen);
   void ClearScreen();
   uint32_t mWidth;
   uint32_t mHeight;

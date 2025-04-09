@@ -1,16 +1,14 @@
 #include "main.hpp"
 
-#include "SDL_surface.h"
-#include "graphics/color.hpp"
-#include "graphics/screenBuffer.hpp"
+#include "graphics/screen.hpp"
+#include "main.hpp"
 
 int main() {
-  ScreenBuffer screenBuffer;
-  screenBuffer.Init(pixelFormat->format, windowSurface->w, windowSurface->h);
-  screenBuffer.SetPixel(Color::Red(), SCREEN_W / 2, SCREEN_H / 2);
-  SDL_BlitSurface(screenBuffer.GetSurface(), nullptr, windowSurface, nullptr);
+  Screen screen;
 
-  SDL_UpdateWindowSurface(sdlWindow);
+  screen.Init(SCREEN_W, SCREEN_H, MAGNIFICATION);
+  screen.Draw(SCREEN_W / 2, SCREEN_H / 2, Color::Blue());
+  screen.SwapScreen();
 
   SDL_Event sdlEvent;
   bool running = true;

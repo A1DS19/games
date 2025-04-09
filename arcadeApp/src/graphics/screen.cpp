@@ -2,6 +2,7 @@
 
 #include <SDL2/SDL.h>
 
+#include <cassert>
 #include <cstdlib>
 
 #include "SDL_surface.h"
@@ -26,12 +27,12 @@ SDL_Window *Screen::Init(uint32_t w, uint32_t h, uint32_t mag) {
   mWidth = w;
   mHeight = h;
 
-  SDL_Window *sdlWindow =
+  moptrWindow =
       SDL_CreateWindow("ArcadeApp", SDL_WINDOWPOS_CENTERED,
-                       SDL_WINDOWPOS_CENTERED, mWidth, mHeight, 0);
+                       SDL_WINDOWPOS_CENTERED, mWidth * mag, mHeight * mag, 0);
 
-  if (sdlWindow) {
-    mnoptrSurface = SDL_GetWindowSurface(sdlWindow);
+  if (moptrWindow) {
+    mnoptrSurface = SDL_GetWindowSurface(moptrWindow);
     SDL_PixelFormat *pixelFormat = mnoptrSurface->format;
     Color::InitColorFormat(pixelFormat);
     mClearColor = Color::Black();
@@ -43,16 +44,32 @@ SDL_Window *Screen::Init(uint32_t w, uint32_t h, uint32_t mag) {
 }
 
 void Screen::SwapScreen() {
-  ClearScreen();
-  SDL_BlitSurface(mBackBuffer.GetSurface(), nullptr, mnoptrSurface, nullptr);
-  SDL_UpdateWindowSurface(moptrWindow);
-  mBackBuffer.Clear();
+  assert(moptrWindow);
+  if (moptrWindow) {
+    ClearScreen();
+    SDL_BlitScaled(mBackBuffer.GetSurface(), nullptr, mnoptrSurface, nullptr);
+    SDL_UpdateWindowSurface(moptrWindow);
+    mBackBuffer.Clear(mClearColor);
+  }
 }
 
-void Screen::Draw(int x, int y, const Color &color) {}
+void Screen::Draw(int x, int y, const Color &color) {
+  assert(moptrWindow);
+  if (moptrWindow) {
+    mBackBuffer.SetPixel(color, x, y);
+  }
+}
 
-void Screen::Draw(const Vec2D &point, const Color &color) {}
+void Screen::Draw(const Vec2D &point, const Color &color) {
+  assert(moptrWindow);
+  if (moptrWindow) {
+    mBackBuffer.SetPixel(color, point.GetX(), point.GetY());
+  }
+}
 
 void Screen::ClearScreen() {
-  SDL_FillRect(mnoptrSurface, nullptr, mClearColor.GetPixelColor());
+  assert(moptrWindow);
+  if (moptrWindow) {
+    SDL_FillRect(mnoptrSurface, nullptr, mClearColor.GetPixelColor());
+  }
 }
