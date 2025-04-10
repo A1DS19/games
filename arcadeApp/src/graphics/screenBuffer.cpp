@@ -1,5 +1,7 @@
 #include "graphics/screenBuffer.hpp"
 
+#include <iostream>
+
 ScreenBuffer::ScreenBuffer() : mSurface(nullptr) {}
 
 ScreenBuffer::ScreenBuffer(const ScreenBuffer &screenBuffer) {
@@ -51,13 +53,11 @@ void ScreenBuffer::Clear(const Color &color) {
 
 void ScreenBuffer::SetPixel(const Color &color, uint32_t x, uint32_t y) {
   assert(mSurface);
-  SDL_LockSurface(mSurface);
-
   if (mSurface && (y < mSurface->h && y >= 0 && x >= 0 && x < mSurface->w)) {
+    SDL_LockSurface(mSurface);
     uint32_t *pixels = (uint32_t *)mSurface->pixels;
     size_t index = GetIndex(y, x);
     pixels[index] = color.GetPixelColor();
-
     SDL_UnlockSurface(mSurface);
   }
 }

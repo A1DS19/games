@@ -2,12 +2,15 @@
 
 #include "graphics/screen.hpp"
 #include "main.hpp"
+#include "shapes/line2d.hpp"
 
 int main() {
   Screen screen;
 
   screen.Init(SCREEN_W, SCREEN_H, MAGNIFICATION);
-  screen.Draw(SCREEN_W / 2, SCREEN_H / 2, Color::Blue());
+  Line2d line = {Vec2D(0, 0), Vec2D(SCREEN_W, SCREEN_H)};
+  screen.Draw(line, Color::White());
+  // screen.Draw(SCREEN_W / 2, SCREEN_H / 2, Color::Blue());
   screen.SwapScreen();
 
   SDL_Event sdlEvent;

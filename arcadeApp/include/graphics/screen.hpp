@@ -8,6 +8,7 @@
 
 struct SDL_Window;
 struct SDL_Surface;
+class Line2d;
 class Vec2D;
 
 class Screen {
@@ -23,6 +24,7 @@ public:
   inline uint32_t GetHeiht() const { return mHeight; }
   void Draw(int x, int y, const Color &color);
   void Draw(const Vec2D &point, const Color &color);
+  void Draw(const Line2d &line, const Color &color);
 
 private:
   Screen(const Screen &screen);
