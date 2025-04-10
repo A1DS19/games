@@ -58,7 +58,6 @@ void Screen::SwapScreen() {
 void Screen::Draw(int x, int y, const Color &color) {
   assert(moptrWindow);
   if (moptrWindow) {
-    std::cout << "x:" << x << " y:" << y << std::endl;
     mBackBuffer.SetPixel(color, x, y);
   }
 }
