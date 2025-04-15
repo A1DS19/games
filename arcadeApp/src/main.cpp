@@ -1,5 +1,6 @@
 #include "main.hpp"
 
+#include "graphics/color.hpp"
 #include "graphics/screen.hpp"
 #include "main.hpp"
 #include "shapes/aaRectangle.hpp"
@@ -17,9 +18,9 @@ int main() {
   Circle circle = {Vec2D(SCREEN_W / 2 + 50, SCREEN_H / 2 + 50), 50};
 
   screen.Draw(line, Color::Red());
-  screen.Draw(triangle, Color::White(), true, Color::Cyan());
-  screen.Draw(rectangle, Color::Blue());
-  screen.Draw(circle, Color::Pink(), true);
+  screen.Draw(triangle, Color::White(), true, Color::White());
+  screen.Draw(rectangle, Color::Blue(), true, Color::Blue());
+  screen.Draw(circle, Color(0, 255, 0, 150), true, Color(0, 255, 0, 150));
   screen.Draw(SCREEN_W / 2, SCREEN_H / 2, Color::Blue());
 
   screen.SwapScreen();
