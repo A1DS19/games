@@ -8,7 +8,9 @@
 #include <vector>
 
 #include "SDL_surface.h"
+#include "Utils.h"
 #include "shapes/aaRectangle.hpp"
+#include "shapes/circle.hpp"
 #include "shapes/line2d.hpp"
 #include "shapes/triangle.hpp"
 
@@ -132,4 +134,22 @@ void Screen::Draw(const AARectangle &rectangle, const Color &color) {
   Draw(p1p2, color);
   Draw(p2p3, color);
   Draw(p3p0, color);
+}
+
+void Screen::Draw(const Circle &circle, const Color &color) {
+  static unsigned int NUM_CIRCLE_SEGMENTS = 30;
+  float angle = TWO_PI / float(NUM_CIRCLE_SEGMENTS);
+
+  Vec2D p0 = Vec2D(circle.GetCenterPoint().GetX() + circle.GetRadius(),
+                   circle.GetCenterPoint().GetY());
+  Vec2D p1 = p0;
+  Line2d nextLineToDraw;
+
+  for (unsigned int i = 0; i < NUM_CIRCLE_SEGMENTS; i++) {
+    p1.Rotate(angle, circle.GetCenterPoint());
+    nextLineToDraw.SetP1(p1);
+    nextLineToDraw.SetP0(p0);
+    Draw(nextLineToDraw, color);
+    p0 = p1;
+  }
 }
