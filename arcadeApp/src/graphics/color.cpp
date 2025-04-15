@@ -122,7 +122,7 @@ Color Color::Evaluate1MinueSourceAlpha(const Color &source,
   // SourceRGB * sourceAlpha + DestinationRGB * (1 - sourceAlpha)
   uint8_t alpha = source.GetAlpha();
 
-  float sourceAlpha = float(alpha) / 255.0f;
+  float sourceAlpha = static_cast<float>(alpha) / 255.0f;
   float destAlpha = 1.0f - sourceAlpha;
 
   Color outColor;
