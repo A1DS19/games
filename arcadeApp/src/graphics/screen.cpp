@@ -5,9 +5,12 @@
 #include <cassert>
 #include <cmath>
 #include <cstdlib>
+#include <vector>
 
 #include "SDL_surface.h"
+#include "shapes/aaRectangle.hpp"
 #include "shapes/line2d.hpp"
+#include "shapes/triangle.hpp"
 
 Screen::Screen()
     : mWidth(0), mHeight(0), moptrWindow(nullptr), mnoptrSurface(nullptr) {}
@@ -106,4 +109,27 @@ void Screen::Draw(const Line2d &line, const Color &color) {
       y0 += sy;
     }
   }
+}
+
+void Screen::Draw(const Triangle &triangle, const Color &color) {
+  Line2d p0p1 = Line2d(triangle.GetP0(), triangle.GetP1());
+  Line2d p1p2 = Line2d(triangle.GetP1(), triangle.GetP2());
+  Line2d p2p0 = Line2d(triangle.GetP2(), triangle.GetP0());
+
+  Draw(p0p1, color);
+  Draw(p1p2, color);
+  Draw(p2p0, color);
+}
+
+void Screen::Draw(const AARectangle &rectangle, const Color &color) {
+  std::vector<Vec2D> points = rectangle.GetPoints();
+  Line2d p0p1 = Line2d(points[0], points[1]);
+  Line2d p1p2 = Line2d(points[1], points[2]);
+  Line2d p2p3 = Line2d(points[2], points[3]);
+  Line2d p3p0 = Line2d(points[3], points[0]);
+
+  Draw(p0p1, color);
+  Draw(p1p2, color);
+  Draw(p2p3, color);
+  Draw(p3p0, color);
 }

@@ -62,12 +62,12 @@ AARectangle AARectangle::Inset(const AARectangle &rectangle, Vec2D &insets) {
                      rectangle.GetHeigth() - 2 * insets.GetY());
 }
 
-std::vector<Vec2D> AARectangle::GetPoints() {
+std::vector<Vec2D> AARectangle::GetPoints() const {
   std::vector<Vec2D> points;
   points.push_back(mPoints[0]);
   points.push_back(Vec2D(mPoints[1].GetX(), mPoints[0].GetY()));
   points.push_back(mPoints[1]);
-  points.push_back(Vec2D(mPoints[1].GetX(), mPoints[1].GetY()));
+  points.push_back(Vec2D(mPoints[0].GetX(), mPoints[1].GetY()));
 
   return points;
 }
