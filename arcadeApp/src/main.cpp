@@ -12,6 +12,7 @@ int main() {
   Screen screen;
 
   screen.Init(SCREEN_W, SCREEN_H, MAGNIFICATION);
+
   Line2d line = {Vec2D(0, 0), Vec2D(SCREEN_W, SCREEN_H)};
   Triangle triangle = {Vec2D(60, 10), Vec2D(10, 110), Vec2D(110, 110)};
   AARectangle rectangle = {Vec2D(SCREEN_W / 2 - 25, SCREEN_H / 2 - 25), 50, 50};
