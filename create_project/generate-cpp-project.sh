@@ -1,92 +1,93 @@
 #!/bin/bash
 
 if [ -z "$1" ]; then
-  echo "Usage: $0 <directory-name>"
+  echo "Usage: $0 <project-name>"
   exit 1
 fi
 
-# Create necessary directories: bin, build, include, lib, scripts, and src
-mkdir -p "$1"/{bin,build,include,scripts,src,lib}
-cd "$1"
+# Create project folder structure
+mkdir -p "$1"/{bin,build,include,lib,scripts,src}
+cd "$1" || exit 1
 
-# Create .gitignore file
+# Create .gitignore
 cat > .gitignore << 'EOF'
-# Ignore build artifacts
+# Build artifacts
 build/*
 bin/*
 lib/*
 
-# Ignore generated files
-compile_commands.json
-.clang_complete
-
-# Ignore editor files
+# Editor files
 *.swp
 *~
 
-# OS-specific files
+# OS-specific
 .DS_Store
 .cache/
+
+# Generated
+compile_commands.json
+.clang_complete
 EOF
+
+# Create .gitkeep files to retain empty directories in Git
+touch build/.gitkeep bin/.gitkeep lib/.gitkeep
+
 
 # Create CMakeLists.txt
 cat > CMakeLists.txt << 'EOF'
-# Enable export of compile_commands.json
+cmake_minimum_required(VERSION 3.14)
+
+# Dynamically name the project after the folder
+get_filename_component(PROJECT_NAME \${CMAKE_SOURCE_DIR} NAME)
+project(\${PROJECT_NAME} LANGUAGES CXX)
+
+# Enable compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Specify minimum CMake version
-cmake_minimum_required(VERSION 3.10)
-
-# Set the project name dynamically based on the folder name
-get_filename_component(PROJECT_NAME ${CMAKE_SOURCE_DIR} NAME)
-project(${PROJECT_NAME})
-
-# Set the C++ standard
+# Use modern C++ standard
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Include directories
-include_directories(${CMAKE_SOURCE_DIR}/include)
-
-# Compiler flags (e.g., debug information)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
-
-# Source files (all .cpp files in the src directory)
-file(GLOB SOURCES ${CMAKE_SOURCE_DIR}/src/*.cpp)
-
-# Add executable
-add_executable(main ${SOURCES})
-
-# Set the output directory for the executable
-set_target_properties(main PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
-
-# See what is happening during linking
+# Enable verbose makefile
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
-# Add library directory
-link_directories(${CMAKE_SOURCE_DIR}/lib)
+# Include local headers
+include_directories(\${CMAKE_SOURCE_DIR}/include)
 
-# Link pdcurses library
-# target_link_libraries(main PRIVATE pdcurses) uncomment and add library
+# Gather all source files
+file(GLOB SOURCES CONFIGURE_DEPENDS \${CMAKE_SOURCE_DIR}/src/*.cpp)
 
-# Custom target to generate .clang_complete (optional)
+# Define the executable
+add_executable(main \${SOURCES})
+
+# Set output directory
+set_target_properties(main PROPERTIES
+  RUNTIME_OUTPUT_DIRECTORY \${CMAKE_SOURCE_DIR}/bin
+)
+
+# Optional: link libraries from lib/
+# link_directories(\${CMAKE_SOURCE_DIR}/lib)
+# target_link_libraries(main PRIVATE pdcurses)
+
+# Optional: custom target to generate .clang_complete
 add_custom_target(
   generate_clang_complete
-  COMMAND python ${CMAKE_SOURCE_DIR}/scripts/cc_args.py ${CMAKE_BINARY_DIR}/compile_commands.json > ${CMAKE_SOURCE_DIR}/.clang_complete
-  DEPENDS ${CMAKE_BINARY_DIR}/compile_commands.json
+  COMMAND python \${CMAKE_SOURCE_DIR}/scripts/cc_args.py \${CMAKE_BINARY_DIR}/compile_commands.json > \${CMAKE_SOURCE_DIR}/.clang_complete
+  DEPENDS \${CMAKE_BINARY_DIR}/compile_commands.json
 )
 EOF
 
-# Create a sample header file in include directory: main.hpp
+# Create include/main.hpp
 cat > include/main.hpp << 'EOF'
 #pragma once
 
 #include <iostream>
-#include <cstdlib>  
+#include <cstdlib>
 
 void hello();
 EOF
 
-# Create a sample source file in src directory: main.cpp
+# Create src/main.cpp
 cat > src/main.cpp << 'EOF'
 #include "main.hpp"
 
@@ -100,7 +101,7 @@ int main() {
 }
 EOF
 
-# Create a minimal placeholder Python script in scripts directory: cc_args.py
+# Create scripts/cc_args.py (placeholder script)
 cat > scripts/cc_args.py << 'EOF'
 #!/usr/bin/env python
 import sys
@@ -108,12 +109,26 @@ import sys
 if len(sys.argv) < 2:
     sys.exit("Usage: cc_args.py <compile_commands.json>")
 
-# This is a simple placeholder that prints the contents of compile_commands.json.
 with open(sys.argv[1], 'r') as f:
     print(f.read())
 EOF
 
-# Make the Python script executable
 chmod +x scripts/cc_args.py
 
-echo "Project '$1' created successfully."
+# Linux-specific: generate .clangd config
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  cat > .clangd << 'EOF'
+CompileFlags:
+  Add: [
+    "-I/usr/lib/gcc/x86_64-linux-gnu/13/include",
+    "-I/usr/lib/gcc/x86_64-linux-gnu/13/include-fixed",
+    "-I/usr/include/c++/13",
+    "-I/usr/include/x86_64-linux-gnu/c++/13",
+    "-I/usr/local/include",
+    "-I/usr/include/x86_64-linux-gnu",
+    "-I/usr/include"
+  ]
+EOF
+fi
+
+echo "✅ Project '$1' created successfully."
