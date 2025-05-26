@@ -13,8 +13,11 @@ cd "$1" || exit 1
 cat > .gitignore << 'EOF'
 # Build artifacts
 build/*
+!build/.gitkeep
 bin/*
+!bin/.gitkeep
 lib/*
+!lib/.gitkeep
 
 # Editor files
 *.swp
